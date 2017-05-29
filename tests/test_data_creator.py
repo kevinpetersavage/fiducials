@@ -28,30 +28,30 @@ def test_generate_angles():
     assert (angles == np.array([20,21,22,23,24,25,26,27,28,29])).all()
 
 def test_generate_volume_from_fiducials():
-    volume = generate_volume_from_fiducials(np.array([[100,100,100]]), 200, 5)
+    volume = generate_volume_from_fiducials(np.array([[100,100,100],[50,50,50]]), 200, 5)
 
     assert volume.shape == (200,200,200)
-    assert volume[100,100,100] == 1
-    assert volume[99,99,99] == 1
-    assert volume[50,50,50] == 0
+    assert volume[100,100,100] == False
+    assert volume[50,50,50] == False
+    assert volume[150,150,150] == True
+
+def test_generate_volume_from_fiducial():
+    volume = generate_volume_from_fiducial(np.array([100,100,100]), 200, 5)
+
+    assert volume.shape == (200,200,200)
+    assert volume[100,100,100] == False
+    assert volume[99,99,99] == False
+    assert volume[50,50,50] == True
 
 def test_project_fiducials():
     projections = project_fiducials(
-        fiducials = np.array([[1,2,3],[40,50,60],[100,100,100]]),
+        volume = np.ones((100,100,100)) > 0,
         angles = [0, 45, 90],
-        volume_dims = 200,
-        image_dims = 120
+        image_dims = 20
     )
     
-    assert projections == []
+    result = np.array(list(projections))
 
-def test_generate_image_from_projections():
-    images = generate_image_from_projections(
-        projections = np.array([[100,100]]),
-        image_dims = 120,
-        radius_of_fiducials = 5
-    )
+    assert result.shape == (3,20,20)
+    assert result.all()
 
-    assert images[1, 100, 100] == 0
-    assert images[1, 98, 98] == 0
-    assert images[1, 95, 95] == 1
