@@ -3,21 +3,21 @@ from fiducials.data_creator import *
 
 def test_create_example_images():
     angles, images = create_example_images(
-        number_of_images=10,
+        number_of_images=20,
         start_angle=10,
-        end_angle=20,
-        number_of_fiducials=80,
+        end_angle=170,
+        number_of_fiducials=20,
         radius_of_fiducials=5,
         volume_dims=200,
         image_dims=120
     )
 
     # check some high level properties
-    assert images.shape == (10, 120, 120)
+    assert images.shape == (10, 150, 150)
     assert ((images == 1) | (images == 0)).all()
 
-    max_zeros_per_image = np.pi * 25 * 80
-    pixels_per_image = 80 * 80
+    max_zeros_per_image = np.pi * 25 * 20
+    pixels_per_image = 150 * 150
     min_ones_per_image = pixels_per_image - max_zeros_per_image
     min_average = min_ones_per_image / pixels_per_image
 
